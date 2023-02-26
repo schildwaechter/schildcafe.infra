@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schildcafe-servitor
+  namespace: schildcafe
+  labels:
+    app: schildcafe-servitor
+spec:
+  selector:
+    matchLabels:
+      app: "schildcafe-servitor"
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: schildcafe-servitor
+    spec:
+      containers:
+      - image: "schildwaechter/schildcafe.servitor:main"
+        name: servitor
+        env:
+          - name: GELF_LOGGING
+            value: "false"
+          - name: GIN_MODE
+            value: "release"
+          - name: MYSQL_PORT
+            value: "3306"
+          - name: MYSQL_SERVER
+            value: "schildcafe-mysql.schildcafe"
+          - name: MYSQL_DB
+            value: "cafe"
+          - name: MYSQL_USER
+            value: "root"
+          - name: MYSQL_PASS
+            valueFrom:
+              secretKeyRef:
+                name: schildcafe-mysql-secret
+                key: password
+        ports:
+          - containerPort: 1333
+            name: servitor
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 1333
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 1333
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schildcafe-servitor
+  namespace: schildcafe
+spec:
+  ports:
+    - port: 1333
+  selector:
+    app: schildcafe-servitor
+  type: NodePort
+

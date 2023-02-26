@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: schildcafe-barista
+  namespace: schildcafe
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: schildcafe-barista
+            image: schildwaechter/schildcafe.barista:main
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: COFFEE_MACHINES
+              value: '["http://$(SCHILDCAFE_COFFEE_SERVICE_HOST):$(SCHILDCAFE_COFFEE_SERVICE_PORT)"]'
+            - name: MYSQL_PORT
+              value: "3306"
+            - name: MYSQL_SERVER
+              value: "schildcafe-mysql.schildcafe"
+            - name: MYSQL_DB
+              value: "cafe"
+            - name: MYSQL_USER
+              value: "root"
+            - name: MYSQL_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: schildcafe-mysql-secret
+                  key: password
+            command:
+#            - /bin/sh
+#            - -c
+#            - date; echo Hello from the Kubernetes cluster; env
+            - python3
+            - ./barista.py
+          restartPolicy: OnFailure

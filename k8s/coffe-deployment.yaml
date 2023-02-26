@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schildcafe-coffee
+  namespace: schildcafe
+  labels:
+    app: schildcafe-coffee
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: schildcafe-coffee
+  template:
+    metadata:
+      labels:
+        app: schildcafe-coffee
+    spec:
+      containers:
+        - image: "schildwaechter/cessda.cafe.coffee.carsten:main"
+          name: schildcafe-coffee
+          ports:
+            - containerPort: 1337
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 1337
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 1337
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schildcafe-coffee
+  namespace: schildcafe
+spec:
+  ports:
+    - port: 1337
+  selector:
+    app: schildcafe-coffee
+  type: NodePort
+

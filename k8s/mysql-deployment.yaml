@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schildcafe-mysql
+  namespace: schildcafe
+spec:
+  selector:
+    matchLabels:
+      app: schildcafe-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: schildcafe-mysql
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: schildcafe-mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: schildcafe-mysql-secret
+              key: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: schildcafe-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: schildcafe-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: schildcafe-mysql-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schildcafe-mysql
+  namespace: schildcafe
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: schildcafe-mysql
+  type: NodePort
+
