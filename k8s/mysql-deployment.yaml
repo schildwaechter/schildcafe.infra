@@ -27,12 +27,25 @@ spec:
         - containerPort: 3306
           name: mysql
         volumeMounts:
+        - name: schildcafe-mysql-initdb
+          mountPath: /docker-entrypoint-initdb.d
         - name: schildcafe-mysql-persistent-storage
           mountPath: /var/lib/mysql
       volumes:
+      - name: schildcafe-mysql-initdb
+        configMap:
+          name: schildcafe-mysql-initdb-config
       - name: schildcafe-mysql-persistent-storage
         persistentVolumeClaim:
           claimName: schildcafe-mysql-pv-claim
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: schildcafe-mysql-initdb-config
+  namespace: schildcafe
+data:
+  init.sql: "CREATE DATABASE IF NOT EXISTS cafe;"
 ---
 apiVersion: v1
 kind: Service
