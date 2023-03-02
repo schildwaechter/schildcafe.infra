@@ -15,10 +15,14 @@ spec:
     metadata:
       labels:
         app: schildcafe-servitor
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
     spec:
       containers:
-      - image: "schildwaechter/schildcafe.servitor:main"
-        name: servitor
+      - name: servitor
+        image: "schildwaechter/schildcafe.servitor:main"
+        imagePullPolicy: Always
         env:
           - name: GELF_LOGGING
             value: "false"
@@ -26,7 +30,7 @@ spec:
             value: "release"
           - name: MYSQL_PORT
             value: "3306"
-          - name: MYSQL_SERVER
+          - name: MYSQL_HOST
             value: "schildcafe-mysql.schildcafe"
           - name: MYSQL_DB
             value: "cafe"
@@ -48,6 +52,13 @@ spec:
           httpGet:
             path: /healthcheck
             port: 1333
+        resources:
+          requests:
+            memory: "16Mi"
+            cpu: "10m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
 ---
 apiVersion: v1
 kind: Service

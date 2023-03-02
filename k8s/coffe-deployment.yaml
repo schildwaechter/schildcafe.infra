@@ -14,10 +14,19 @@ spec:
     metadata:
       labels:
         app: schildcafe-coffee
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
     spec:
       containers:
-        - image: "schildwaechter/cessda.cafe.coffee.carsten:main"
-          name: schildcafe-coffee
+        - name: schildcafe-coffee
+          image: "schildwaechter/cessda.cafe.coffee.carsten:main"
+          imagePullPolicy: Always
+          env:
+          - name: GELF_LOGGING
+            value: "true"
+          - name: GIN_MODE
+            value: "release"
           ports:
             - containerPort: 1337
           livenessProbe:
@@ -28,6 +37,13 @@ spec:
             httpGet:
               path: /healthcheck
               port: 1337
+          resources:
+            requests:
+              memory: "16Mi"
+              cpu: "10m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
 ---
 apiVersion: v1
 kind: Service

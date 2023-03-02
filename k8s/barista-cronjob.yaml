@@ -12,13 +12,13 @@ spec:
           containers:
           - name: schildcafe-barista
             image: schildwaechter/schildcafe.barista:main
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             env:
             - name: COFFEE_MACHINES
               value: '["http://$(SCHILDCAFE_COFFEE_SERVICE_HOST):$(SCHILDCAFE_COFFEE_SERVICE_PORT)"]'
             - name: MYSQL_PORT
               value: "3306"
-            - name: MYSQL_SERVER
+            - name: MYSQL_HOST
               value: "schildcafe-mysql.schildcafe"
             - name: MYSQL_DB
               value: "cafe"
@@ -30,9 +30,6 @@ spec:
                   name: schildcafe-mysql-secret
                   key: password
             command:
-#            - /bin/sh
-#            - -c
-#            - date; echo Hello from the Kubernetes cluster; env
             - python3
             - ./barista.py
           restartPolicy: OnFailure
