@@ -39,10 +39,10 @@ spec:
               port: 1337
           resources:
             requests:
-              memory: "16Mi"
+              memory: "8Mi"
               cpu: "10m"
             limits:
-              memory: "128Mi"
+              memory: "32Mi"
               cpu: "100m"
 ---
 apiVersion: v1
@@ -51,9 +51,10 @@ metadata:
   name: schildcafe-coffee
   namespace: schildcafe
 spec:
+  clusterIP: "None"
   ports:
     - port: 1337
   selector:
     app: schildcafe-coffee
-  type: NodePort
+
 

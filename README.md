@@ -10,6 +10,7 @@ This is the [Kubernetes](https://kubernetes.io/) setup for the SchildCafé.
 Tested with [Minikube](https://minikube.sigs.k8s.io/docs/).
 
 ```
+minikube config set memory 3819
 minikube start
 minikube addons enable metrics-server
 minikube dashboard &

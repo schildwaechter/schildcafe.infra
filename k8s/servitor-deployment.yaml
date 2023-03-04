@@ -31,7 +31,7 @@ spec:
           - name: MYSQL_PORT
             value: "3306"
           - name: MYSQL_HOST
-            value: "schildcafe-mysql.schildcafe"
+            value: "schildcafe-mysql.schildcafe.svc.cluster.local"
           - name: MYSQL_DB
             value: "cafe"
           - name: MYSQL_USER
@@ -57,7 +57,7 @@ spec:
             memory: "16Mi"
             cpu: "10m"
           limits:
-            memory: "128Mi"
+            memory: "32Mi"
             cpu: "100m"
 ---
 apiVersion: v1

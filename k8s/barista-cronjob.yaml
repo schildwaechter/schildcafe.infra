@@ -5,6 +5,7 @@ metadata:
   namespace: schildcafe
 spec:
   schedule: "* * * * *"
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
@@ -15,11 +16,11 @@ spec:
             imagePullPolicy: Always
             env:
             - name: COFFEE_MACHINES
-              value: '["http://$(SCHILDCAFE_COFFEE_SERVICE_HOST):$(SCHILDCAFE_COFFEE_SERVICE_PORT)"]'
+              value: '["http://schildcafe-coffee.schildcafe.svc.cluster.local:1337"]'
             - name: MYSQL_PORT
               value: "3306"
             - name: MYSQL_HOST
-              value: "schildcafe-mysql.schildcafe"
+              value: "schildcafe-mysql.schildcafe.svc.cluster.local"
             - name: MYSQL_DB
               value: "cafe"
             - name: MYSQL_USER
@@ -29,7 +30,9 @@ spec:
                 secretKeyRef:
                   name: schildcafe-mysql-secret
                   key: password
+            - name: GELF_LOGGING
+              value: "TRUE"
             command:
             - python3
             - ./barista.py
-          restartPolicy: OnFailure
+          restartPolicy: Never
