@@ -13,7 +13,8 @@ spec:
           containers:
           - name: schildcafe-barista
             image: schildwaechter/schildcafe.barista:main
-            imagePullPolicy: Always
+            #imagePullPolicy: Always
+            imagePullPolicy: IfNotPresent
             env:
             - name: COFFEE_MACHINES
               value: '["http://schildcafe-coffee.schildcafe.svc.cluster.local:1337"]'

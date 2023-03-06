@@ -6,7 +6,6 @@ metadata:
   labels:
     app: schildcafe-coffee
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: schildcafe-coffee
@@ -21,7 +20,8 @@ spec:
       containers:
         - name: schildcafe-coffee
           image: "schildwaechter/cessda.cafe.coffee.carsten:main"
-          imagePullPolicy: Always
+          #imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
           - name: GELF_LOGGING
             value: "true"

@@ -22,7 +22,9 @@ spec:
       containers:
       - name: servitor
         image: "schildwaechter/schildcafe.servitor:main"
-        imagePullPolicy: Always
+        #imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
+
         env:
           - name: GELF_LOGGING
             value: "false"

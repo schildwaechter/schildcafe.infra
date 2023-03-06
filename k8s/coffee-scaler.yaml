@@ -1,0 +1,23 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: schildcafe-coffee-scaler
+  namespace: schildcafe
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: schildcafe-coffee
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Object
+    object:
+      metric:
+        name: job_queue_length
+      describedObject:
+        kind: Namespace
+        name: schildcafe
+      target:
+        type: Value
+        averageValue: "1"
