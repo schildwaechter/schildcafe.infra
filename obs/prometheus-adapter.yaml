@@ -1,0 +1,7 @@
+prometheus:
+  url: "http://prometheus-server"
+  port: "80"
+  rules:
+  - seriesQuery: 'job_queue_length'
+    name: 'job_queue_length'
+    metricsQuery: '<<.Series>>'

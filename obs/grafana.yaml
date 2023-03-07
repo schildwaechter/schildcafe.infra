@@ -1,0 +1,6 @@
+adminPassword: secret1234
+sidecar:
+  datasources:
+    enabled: true
+    label: "grafana_datasource"
+    labelValue: "1"
